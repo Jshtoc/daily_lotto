@@ -13,6 +13,35 @@ function generateLottoNumbers(): number[] {
   return numbers.sort((a, b) => a - b);
 }
 
+const fortunes = [
+  "오늘은 뜻밖의 행운이 찾아오는 날입니다.",
+  "작은 결정이 큰 변화를 가져올 수 있습니다.",
+  "주변 사람의 한마디에서 힌트를 얻게 됩니다.",
+  "오늘 하루 긍정적인 에너지가 가득합니다.",
+  "기다리던 좋은 소식이 곧 도착합니다.",
+  "새로운 만남이 행운을 가져다줍니다.",
+  "금전운이 상승하는 하루입니다.",
+  "도전하면 반드시 좋은 결과가 있을 것입니다.",
+  "오래된 인연에서 기쁜 소식이 옵니다.",
+  "오늘의 선택이 미래를 바꿀 수 있습니다.",
+  "예상치 못한 곳에서 행운이 찾아옵니다.",
+  "자신을 믿으면 좋은 일이 생깁니다.",
+  "오늘은 직감을 따라가 보세요.",
+  "웃음이 행운을 부르는 하루입니다.",
+  "사소한 것에 감사하면 큰 복이 옵니다.",
+  "용기 있는 한 걸음이 행운의 시작입니다.",
+  "하늘이 돕는 날, 자신감을 가지세요.",
+  "오늘은 숫자 7이 행운을 가져다줍니다.",
+  "마음먹은 일이 순조롭게 풀리는 날입니다.",
+  "좋은 기운이 당신을 감싸고 있습니다.",
+];
+
+function getDailyFortune(): string {
+  const today = new Date();
+  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+  return fortunes[seed % fortunes.length];
+}
+
 function getBallColor(num: number): string {
   if (num <= 10) return "bg-yellow-400";
   if (num <= 20) return "bg-blue-500";
@@ -67,6 +96,11 @@ export default function Home() {
       >
         번호 추첨하기
       </button>
+
+      <div className="mt-10 sm:mt-14 px-4 py-4 bg-white/5 rounded-xl max-w-md w-full text-center">
+        <p className="text-yellow-400 text-xs sm:text-sm font-semibold mb-1">오늘의 운세</p>
+        <p className="text-gray-300 text-sm sm:text-base">{getDailyFortune()}</p>
+      </div>
     </main>
   );
 }
