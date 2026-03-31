@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function generateLottoNumbers(): number[] {
   const numbers: number[] = [];
@@ -36,9 +36,20 @@ const fortunes = [
   "좋은 기운이 당신을 감싸고 있습니다.",
 ];
 
-function getDailyFortune(): string {
+function getUserId(): number {
+  const key = "daily_lotto_uid";
+  let uid = localStorage.getItem(key);
+  if (!uid) {
+    uid = String(Math.floor(Math.random() * 1000000));
+    localStorage.setItem(key, uid);
+  }
+  return parseInt(uid, 10);
+}
+
+function getDailyFortune(userId: number): string {
   const today = new Date();
-  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+  const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+  const seed = dateSeed + userId * 7;
   return fortunes[seed % fortunes.length];
 }
 
@@ -53,6 +64,11 @@ function getBallColor(num: number): string {
 export default function Home() {
   const [numbers, setNumbers] = useState<number[]>([]);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [fortune, setFortune] = useState("");
+
+  useEffect(() => {
+    setFortune(getDailyFortune(getUserId()));
+  }, []);
 
   const handleDraw = () => {
     setIsAnimating(true);
@@ -99,7 +115,7 @@ export default function Home() {
 
       <div className="mt-10 sm:mt-14 px-4 py-4 bg-white/5 rounded-xl max-w-md w-full text-center">
         <p className="text-yellow-400 text-xs sm:text-sm font-semibold mb-1">오늘의 운세</p>
-        <p className="text-gray-300 text-sm sm:text-base">{getDailyFortune()}</p>
+        <p className="text-gray-300 text-sm sm:text-base">{fortune || "운세를 불러오는 중..."}</p>
       </div>
     </main>
   );
